@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'todo_list_screen.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -12,32 +15,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: TodoListScreen(),
-    );
-  }
-}
-
-class TodoListScreen extends StatelessWidget {
-  final List<String> todoList = [
-    '할일 1',
-    '할일 2',
-    '할일 3',
-  ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Todo List'),
-      ),
-      body: ListView.builder(
-        itemCount: todoList.length,
-        itemBuilder: (context, index) {
-          return ListTile(
-            title: Text(todoList[index]),
-          );
-        },
-      ),
+      home: const TodoListScreen(),
     );
   }
 }

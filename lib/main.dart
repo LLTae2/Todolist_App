@@ -18,9 +18,11 @@ class MyApp extends StatelessWidget {
       builder: (context, value, child) {
         return MaterialApp(
           title: 'Todo List',
-          theme: ThemeData(
-            primarySwatch: Colors.blue,
-          ),
+          theme: ThemeData(),
+          darkTheme: ThemeData.dark(),
+          // theme: ThemeData(
+          //   primarySwatch: Colors.blue,
+          // ),
           home: const TodoListScreen(),
         );
       },

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:mobile_project/main.dart';
 import 'todo_item.dart';
 
@@ -270,9 +272,12 @@ class _TodoListScreenState extends State<TodoListScreen> {
           Switch(
             value: _isLightMode,
             onChanged: (val) {
-              setState(() {
-                _isLightMode = val;
-              });
+              Get.isDarkMode
+                  ? Get.changeTheme(ThemeData.light())
+                  : Get.changeTheme(ThemeData.dark());
+              // setState(() {
+              //   _isLightMode = val;
+              // });
               MyApp.themeNotifier.value =
                   MyApp.themeNotifier.value == ThemeMode.light
                       ? ThemeMode.dark

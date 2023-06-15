@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile_project/main.dart';
 import 'todo_item.dart';
 
 const int _pageIndexTodoList = 0;
@@ -13,6 +14,7 @@ class TodoListScreen extends StatefulWidget {
 
 class _TodoListScreenState extends State<TodoListScreen> {
   int _currentPageIndex = _pageIndexTodoList;
+  bool _isLightMode = true;
   List<TodoItem> todoList = [];
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -258,8 +260,37 @@ class _TodoListScreenState extends State<TodoListScreen> {
   }
 
   Widget _buildOtherScreen() {
+    Color switchColor = _isLightMode ? Colors.blue : Colors.black;
+    Color textColor = _isLightMode ? Colors.blue : Colors.black;
+
     return Center(
-      child: Text('Other Screen'),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Switch(
+            value: _isLightMode,
+            onChanged: (val) {
+              setState(() {
+                _isLightMode = val;
+              });
+              MyApp.themeNotifier.value =
+                  MyApp.themeNotifier.value == ThemeMode.light
+                      ? ThemeMode.dark
+                      : ThemeMode.light;
+            },
+            activeColor: switchColor, // Apply color to the switch
+          ),
+          SizedBox(height: 10), // Add spacing between the switch and the text
+          Text(
+            _isLightMode ? 'Light Mode' : 'Dark Mode',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: textColor, // Apply color to the text
+            ),
+          ),
+        ],
+      ),
     );
   }
 

@@ -8,14 +8,22 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
+  static final ValueNotifier<ThemeMode> themeNotifier =
+      ValueNotifier(ThemeMode.light);
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Todo List',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const TodoListScreen(),
+    return ValueListenableBuilder(
+      valueListenable: themeNotifier,
+      builder: (context, value, child) {
+        return MaterialApp(
+          title: 'Todo List',
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const TodoListScreen(),
+        );
+      },
     );
   }
 }

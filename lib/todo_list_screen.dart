@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:mobile_project/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'todo_item.dart';
 
 const int _pageIndexTodoList = 0;
@@ -15,12 +14,31 @@ class TodoListScreen extends StatefulWidget {
 }
 
 class _TodoListScreenState extends State<TodoListScreen> {
+  late SharedPreferences _prefs;
   int _currentPageIndex = _pageIndexTodoList;
   bool _isLightMode = true;
   List<TodoItem> todoList = [];
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _priorityController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadThemeMode();
+  }
+
+  Future<void> _loadThemeMode() async {
+    _prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _isLightMode = _prefs.getBool('isLightMode') ?? true;
+    });
+  }
+
+  Future<void> _saveThemeMode(bool isLightMode) async {
+    _prefs = await SharedPreferences.getInstance();
+    await _prefs.setBool('isLightMode', isLightMode);
+  }
 
   void _addTodo() {
     final String newTitle = _titleController.text;
@@ -270,18 +288,10 @@ class _TodoListScreenState extends State<TodoListScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Switch(
+            // value: _isLightMode,
             value: _isLightMode,
             onChanged: (val) {
-              Get.isDarkMode
-                  ? Get.changeTheme(ThemeData.light())
-                  : Get.changeTheme(ThemeData.dark());
-              // setState(() {
-              //   _isLightMode = val;
-              // });
-              MyApp.themeNotifier.value =
-                  MyApp.themeNotifier.value == ThemeMode.light
-                      ? ThemeMode.dark
-                      : ThemeMode.light;
+              _toggleDarkMode(val);
             },
             activeColor: switchColor, // Apply color to the switch
           ),
@@ -297,6 +307,17 @@ class _TodoListScreenState extends State<TodoListScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> _toggleDarkMode(bool isDarkMode) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDarkMode', isDarkMode);
+
+    setState(() {
+      _isLightMode = !_isLightMode;
+    });
+
+    Get.changeThemeMode(isDarkMode ? ThemeMode.dark : ThemeMode.light);
   }
 
   @override
